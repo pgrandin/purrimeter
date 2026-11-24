@@ -38,7 +38,15 @@ const grandma = async n => { for (let i = 0; i < n; i++) await page.tap('#grandm
 // 1. Title screen, then Play.
 await shot('01-title');
 await page.tap('#play');
-check(await ev(() => __p.G.phase === 'build'), 'Play starts the game');
+const howtoUp = () => ev(() => !document.getElementById('overlay').hidden && !!document.querySelector('#overlay .howto'));
+check(await howtoUp(), 'the first Play shows How to play');
+await shot('01b-howto');
+await page.setViewport({ width: 820, height: 1180, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+await shot('01c-howto-portrait');
+await page.setViewport({ width: 1180, height: 820, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+await page.tap('#play');
+check(await ev(() => __p.G.phase === 'build' && document.getElementById('overlay').hidden), 'its Play button starts the game');
+check(await ev(() => localStorage.getItem('purr.howto') === '1'), 'How to play is remembered as seen');
 
 // 2. Tap a cushion on the canvas (real touch input), the build menu opens, build a Yarn Tabby.
 const pad = await ev(() => __p.pad(4));
@@ -58,6 +66,10 @@ await shot('03-wave-1');
 for (let i = 0; i < 60 && (await ev(() => __p.G.phase)) === 'wave'; i++) await step(1);
 const s1 = await state();
 check(s1.phase === 'build' && s1.wave === 1, 'wave 1 ends');
+await page.tap('#help');
+check(await howtoUp() && await ev(() => __p.G.paused), 'the ? button pauses and shows How to play');
+await page.tap('#play');
+check(await ev(() => !__p.G.paused && __p.G.phase === 'build'), 'and Play goes back to the game');
 check(s1.defeated > 0, `critters were defeated (${s1.defeated})`);
 
 // 4. Fast-forward to the boss on wave 5 with plenty of fish for Grandma.
