@@ -14,6 +14,12 @@ export function init(world, camera) {
   W = world;
   cam = camera;
   $('play').onclick = play;
+  $('help').onclick = () => {
+    audio.unlock();
+    if (G.phase === 'lost') return;
+    if (G.phase !== 'title') { G.paused = true; $('pause').textContent = '▶'; closeMenu(); }
+    howto();
+  };
   $('go').onclick = () => { audio.unlock(); game.startWave(); };
   $('grandma').onclick = () => {
     audio.unlock();
@@ -37,6 +43,7 @@ function wake() {
 
 function play() {
   audio.unlock();
+  if (G.phase === 'title' && !seenHowto()) { howto(); return; }
   if (G.phase === 'title') game.begin();
   else if (G.phase === 'lost') game.retry();
   G.paused = false;
@@ -55,6 +62,30 @@ function overlay(kind) {
   $('overlay').innerHTML = `<div class="panel"><div class="logo">${logo}</div><h1>${h}</h1><p>${p}</p>` +
     `<button id="play" class="big" aria-label="${kind === 'lost' ? 'Try again' : 'Play'}">${kind === 'lost' ? '↻' : '▶'}</button></div>`;
   $('play').onclick = play;
+  $('overlay').hidden = false;
+}
+
+// First play: four picture cards that match what the kid will see in the game.
+let howtoDone = false;
+const seenHowto = () => {
+  try { return howtoDone || localStorage.getItem('purr.howto') === '1'; } catch { return howtoDone; }
+};
+function howto() {
+  const cats = Object.keys(CATS).map(k => `<span class="mini" style="--c:${CAT_LOOK[k].fur}">${CATS[k].icon}</span>`).join('');
+  const steps = [
+    ['<span class="cushion">🐾</span><span class="tap">👆</span>', 'Tap a glowing cushion'],
+    [cats, 'Pick a cat. Cats cost 🐟 fish.'],
+    ['<span class="mini go">▶</span>', 'Tap ▶ to call the critters'],
+    ['🐭🐰<span class="arrow">➜</span>🍪', 'Keep them away from the treat jar!'],
+  ].map(([pic, text], i) => `<div class="step"><span class="n">${i + 1}</span><div class="pic">${pic}</div><p>${text}</p></div>`).join('');
+  $('overlay').innerHTML = `<div class="panel howto"><h1>How to play</h1><div class="steps">${steps}</div>` +
+    `<p class="tip"><span class="mini gm">🐱</span>Stuck? Tap Grandma Cat and she helps.</p>` +
+    `<button id="play" class="big" aria-label="Let's go">▶</button></div>`;
+  $('play').onclick = () => {
+    howtoDone = true;
+    try { localStorage.setItem('purr.howto', '1'); } catch {}
+    play();
+  };
   $('overlay').hidden = false;
 }
 

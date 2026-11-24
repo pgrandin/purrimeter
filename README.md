@@ -11,6 +11,7 @@ A cozy tower defense for kids. Cats sit on cushions around the living room and k
 - Stuck? Tap Grandma Cat (bottom left). She spends your fish where it helps most.
 - If the critters eat all the treats, they have a snack party and you replay the same wave with all your cats.
 - Drag to move around, pinch to zoom, 🎯 to see the whole room.
+- The first time you play, a picture guide shows how to start. Tap **?** to see it again.
 
 | Cat | What it does |
 | --- | --- |
@@ -39,3 +40,7 @@ Plain ES modules and [three.js](https://threejs.org) r170 (MIT, in `vendor/`). T
 URL flags: `#nofx` turns off the tilt-shift blur, `#test` exposes `window.__p` and does not start the loop (used by the smoke test).
 
 CI runs the smoke test on every pull request and uploads screenshots as the `shots` artifact. Pushes to `main` deploy to GitHub Pages.
+
+## License
+
+[MIT](LICENSE). three.js is also MIT ([notice](vendor/LICENSE-three.txt)).
