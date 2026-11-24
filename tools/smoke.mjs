@@ -48,13 +48,29 @@ await page.tap('#play');
 check(await ev(() => __p.G.phase === 'build' && document.getElementById('overlay').hidden), 'its Play button starts the game');
 check(await ev(() => localStorage.getItem('purr.howto') === '1'), 'How to play is remembered as seen');
 
-// 2. Tap a cushion on the canvas (real touch input), the build menu opens, build a Yarn Tabby.
+// 2. A finger points at a cushion. Tap it (real touch input), the build menu opens, build a Yarn Tabby.
 const pad = await ev(() => __p.pad(4));
+const fingerAt = () => ev(() => {
+  const f = document.getElementById('finger');
+  if (f.hidden) return null;
+  const r = f.getBoundingClientRect();
+  return { x: r.left + r.width / 2, y: r.top };
+});
+await step(0);
+let f = await fingerAt();
+check(f && Math.abs(f.x - pad.x) < 30 && Math.abs(f.y - pad.y) < 60, `a finger points at the middle cushion (${JSON.stringify(f)} vs ${JSON.stringify(pad)})`);
+await shot('01d-finger');
 await page.touchscreen.tap(pad.x, pad.y);
 check(await ev(() => !document.getElementById('menu').hidden), 'tapping a cushion opens the build menu');
+await step(0);
+f = await fingerAt();
+const first = await ev(() => { const r = document.querySelector('#menu button').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+check(f && Math.abs(f.x - first.x) < 30 && Math.abs(f.y - first.y) < 40, 'then it moves to the first cat in the menu');
 await shot('02-build-menu');
 await page.tap('#menu button');
 check(await ev(() => __p.G.towers[4]?.kind === 'yarn'), 'the first menu button builds a Yarn Tabby on that cushion');
+await step(0);
+check(await fingerAt() === null, 'the finger goes away once a cat is placed');
 
 // 3. Grandma Cat spends the rest, then the first wave.
 await grandma(3);

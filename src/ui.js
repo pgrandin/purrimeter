@@ -204,6 +204,19 @@ function key(e) {
   else if (menuPad >= 0 && '1234'.includes(e.key)) $('menu').querySelectorAll('button')[+e.key - 1]?.click();
 }
 
+// Until the first cat is placed, a finger pokes at a cushion, then at the first cat in its menu.
+const HINT_PAD = 4; // the middle cushion, it reaches two stretches of path
+function finger() {
+  const f = $('finger');
+  f.hidden = G.stats.built > 0 || G.paused || (G.phase !== 'build' && G.phase !== 'wave') || !$('overlay').hidden;
+  if (f.hidden) return;
+  const b = menuPad >= 0 && $('menu').querySelector('button[data-cost]');
+  let x, y;
+  if (b) { const r = b.getBoundingClientRect(); x = r.left + r.width / 2; y = r.top + r.height * 0.45; }
+  else { const p = W.pads[HINT_PAD]; [x, y] = screen(p.x, 0.4, p.z); y += 6; }
+  f.style.transform = `translate(${x}px, ${y}px) translate(-50%, 0)`;
+}
+
 export function update(dt) {
   set('gold', Math.floor(G.gold));
   set('treats', G.treats);
@@ -216,6 +229,7 @@ export function update(dt) {
     for (const b of $('menu').querySelectorAll('button[data-cost]')) b.classList.toggle('poor', +b.dataset.cost > G.gold);
     placeMenu();
   }
+  finger();
   for (let i = pops.length - 1; i >= 0; i--) {
     const p = pops[i];
     p.t += dt;

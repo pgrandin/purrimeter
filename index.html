@@ -77,6 +77,12 @@
   #menu button.poor { opacity: .38; }
   #menu .arm .ic { background: #ff9a9a; }
   #menu .lvl { align-self: center; font-size: 22px; padding: 0 6px; white-space: nowrap; }
+  #finger {
+    position: fixed; left: 0; top: 0; z-index: 7; font-size: 56px; line-height: 1; pointer-events: none;
+    filter: drop-shadow(0 4px 4px rgba(74, 59, 82, .3));
+  }
+  #finger span { display: block; animation: poke 1s ease-in-out infinite; }
+  @keyframes poke { 0%, 100% { translate: 0 0 } 50% { translate: 0 -18px } }
 
   #pops { position: fixed; inset: 0; pointer-events: none; z-index: 4; overflow: hidden; }
   .pop {
@@ -180,6 +186,7 @@
 <button id="go" aria-label="Start the next wave" hidden>▶</button>
 <button id="home" class="round" aria-label="Show the whole room">🎯</button>
 <div id="menu" hidden></div>
+<div id="finger" hidden aria-hidden="true"><span>👆</span></div>
 <div id="pops"></div>
 <div id="card" class="hide"></div>
 <div id="overlay">

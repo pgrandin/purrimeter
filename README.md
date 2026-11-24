@@ -6,7 +6,7 @@ A cozy tower defense for kids. Cats sit on cushions around the living room and k
 
 ## How to play
 
-- Tap a cushion with a glowing paw print to pick a cat. Tap a cat to make it bigger (three levels) or send it home for some fish back.
+- Tap a cushion with a glowing paw print to pick a cat. Until the first cat is placed, a bouncing 👆 shows where to tap. Tap a cat to make it bigger (three levels) or send it home for some fish back.
 - Tap ▶ to call the next wave early (you get a small bonus), or wait and it starts by itself.
 - Stuck? Tap Grandma Cat (bottom left). She spends your fish where it helps most.
 - If the critters eat all the treats, they have a snack party and you replay the same wave with all your cats.
