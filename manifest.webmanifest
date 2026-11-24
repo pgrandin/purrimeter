@@ -1,0 +1,14 @@
+{
+  "name": "Purrimeter",
+  "short_name": "Purrimeter",
+  "description": "A cozy cat tower defense for kids.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#fbe6d4",
+  "theme_color": "#fbe6d4",
+  "icons": [
+    { "src": "icon-180.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

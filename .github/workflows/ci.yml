@@ -1,0 +1,54 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    # GitHub-hosted on purpose: this repo is public, so no self-hosted runners.
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Emoji font, so screenshots look like the iPad
+        run: sudo apt-get install -y -qq fonts-noto-color-emoji >/dev/null || (sudo apt-get update -qq && sudo apt-get install -y -qq fonts-noto-color-emoji)
+      - run: npm install --no-save --no-package-lock puppeteer@25.18.1
+      - name: Play the game in headless Chrome
+        run: |
+          python3 -m http.server 8000 >/dev/null 2>&1 &
+          sleep 1
+          node tools/smoke.mjs http://localhost:8000/
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: shots
+          path: shots/
+
+  deploy:
+    if: github.event_name == 'push'
+    needs: smoke
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
+      - id: deploy
+        uses: actions/deploy-pages@v5
