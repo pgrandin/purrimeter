@@ -152,7 +152,7 @@ export function pop(text, x, y, z, cls = '') {
   el.className = 'pop ' + cls;
   el.textContent = text;
   $('pops').append(el);
-  pops.push({ el, x, y, z, t: 0, life: cls.includes('big') ? 1.8 : 1.1 });
+  pops.push({ el, x, y, z, t: 0, life: cls.includes('huge') ? 1.8 : 1.1 });
 }
 
 function card(def) {

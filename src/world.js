@@ -86,7 +86,7 @@ function strip(path, w, y) {
     pos.push(px[i] + nx * w, y, pz[i] + nz * w, px[i] - nx * w, y, pz[i] - nz * w);
     nor.push(0, 1, 0, 0, 1, 0);
     uv.push(0, i * STEP, 1, i * STEP);
-    if (i) { const k = i * 2; idx.push(k - 2, k - 1, k, k - 1, k + 1, k); }
+    if (i) { const k = i * 2; idx.push(k - 2, k, k - 1, k - 1, k, k + 1); } // counter-clockwise from above
   }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
@@ -222,8 +222,8 @@ export function buildWorld(scene) {
 
   // The path: a teal runner with paw prints.
   const path = buildPath();
-  const run1 = add(new THREE.Mesh(strip(path, 1.05, 0.03), mat('#6cbfb3', { side: THREE.DoubleSide, roughness: 1 })));
-  const run2 = add(new THREE.Mesh(strip(path, 0.88, 0.035), mat('#a8ded6', { side: THREE.DoubleSide, roughness: 1 })));
+  const run1 = add(new THREE.Mesh(strip(path, 1.05, 0.03), mat('#6cbfb3', { roughness: 1 })));
+  const run2 = add(new THREE.Mesh(strip(path, 0.88, 0.035), mat('#a8ded6', { roughness: 1 })));
   run1.receiveShadow = run2.receiveShadow = true;
   const paw = pawTex();
   const prints = [];

@@ -219,7 +219,7 @@ function frame(now) {
 // Hooks for the CI smoke test (tools/smoke.mjs): step the game without real time, then draw one frame.
 window.__p = {
   G, game, world, ready: true, resize,
-  step(sec) { for (let i = 0, n = Math.round(sec / STEP); i < n; i++) game.update(STEP); ui.update(0); },
+  step(sec) { for (let i = 0, n = Math.round(sec / STEP); i < n; i++) game.update(STEP); ui.update(sec); },
   draw() { draw(1 / 60); },
   pad(i) {
     placeCam();

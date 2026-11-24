@@ -142,7 +142,7 @@ function defeat(c) {
   const boss = c.def.boss;
   fx.burst(c.x, c.y + 0.4, c.z, ['#ffd166', '#ff8fb1', '#ffffff', '#9be7ff'], boss ? 70 : 10, boss ? { speed: 5, up: 7, size: 0.15, life: 1.5 } : {});
   sfx(boss ? 'win' : 'sparkle', 0.06);
-  if (boss) hooks.pop('🎉', c.x, 3.2, c.z, 'big');
+  if (boss) hooks.pop('🎉', c.x, 3.2, c.z, 'huge');
   else if (Math.random() < 0.3) hooks.pop('💖', c.x, c.y + c.m.h + 0.4, c.z);
   if (c.kind === 'bunny') for (const s of [-1, 1]) spawn('mini', Math.max(0, c.d + s * 0.3), c.lane + s * 0.25);
   fade(c);
@@ -367,7 +367,7 @@ function endWave() {
   const b = 10 + 4 * G.wave;
   G.gold += b;
   G.stats.waves++;
-  hooks.pop(`+${b}🐟`, W.jar.position.x, 3.2, W.jar.position.z, 'gold big');
+  hooks.pop(`+${b}🐟`, W.jar.position.x, 3.2, W.jar.position.z, 'gold huge');
   sfx('win');
   try { if (G.wave > +(localStorage.getItem('purr.best') || 0)) localStorage.setItem('purr.best', G.wave); } catch {}
 }
