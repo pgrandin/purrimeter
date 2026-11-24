@@ -15,6 +15,12 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+      # Upload the site from a clean checkout, before the test adds node_modules/ and shots/.
+      # The deploy job only runs if this whole job passes.
+      - if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: .
       - uses: actions/setup-node@v7
         with:
           node-version: 24
@@ -45,10 +51,8 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
+    # Deploying in a separate job from the upload: the artifact list can lag a few seconds
+    # behind a fresh upload, and deploy-pages fails if it runs in the same job right after.
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: .
       - id: deploy
         uses: actions/deploy-pages@v5
